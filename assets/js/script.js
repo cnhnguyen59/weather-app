@@ -13,7 +13,7 @@ function getInfo(){
 
     currCityEl.text(`${city} ${moment().format('L')}`) */
 
-    getWeather()
+    getLatLon()
 
     lat = localStorage.getItem('lat')
     lon = localStorage.getItem('lon')
@@ -63,10 +63,9 @@ function getInfo(){
 
     })
   
-
 }
 
-function getWeather(){
+function getLatLon(){
     var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${inputEl.val()}&units=imperial&appid=${apiKey}`
  
      

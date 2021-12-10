@@ -10,28 +10,32 @@
     <title>Weather</title>
 </head>
 <body>
-    <h1 class='bg-primary text-center p-2' style="color:white">Weather Dashboard</h1>
-    <div class="container d-flex ">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <h1 style="color:white">Weather Dashboard</h1>
+            <input class="float-right" type="text" placeholder="'Ex: Chicago'">
+            <button class='btn-primary float-right' onclick="getInfo()">Enter</button>
+    </nav>
+    
+<!--     <div class="container d-flex ">
         <div class="col-lg-4" style="border: 2px solid blue;">
             <h2>Enter a City:</h2>
             <input type="text">
             <button class='btn-primary' onclick="getInfo()">Enter</button>
             <hr size="4" width="90%" color="gray">  
-            <div class="history">
-
+            <div class="history"></div>
             </div>
-        </div>
+        </div> -->
         <div class="col-lg-8 d-column">
-            <div class="current" style="border: 2px black solid"> 
+            <div class="current"> 
                 <h2 class="currCity"><img src=""></h2>
                 <div class="currIcon">
                 </div>
         
                 <div class="currWeather"></div>
             </div>
-            <div class="forecast">
+            <!-- <div class="forecast">
                 <h2>5-Day Forecast:</h2>
-            </div>
+            </div> -->
         </div>
     </div>
 
