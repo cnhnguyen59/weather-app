@@ -15,7 +15,7 @@
         <div class="col-lg-4" style="border: 2px solid blue;">
             <h2>Enter a City:</h2>
             <input type="text">
-            <button class='btn-primary' onclick="getApi()">Enter</button>
+            <button class='btn-primary' onclick="getInfo()">Enter</button>
             <hr size="4" width="90%" color="gray">  
             <div class="history">
 
@@ -23,13 +23,15 @@
         </div>
         <div class="col-lg-8 d-column">
             <div class="current" style="border: 2px black solid"> 
-                <h2 class="currCity">City & Date<img src=""></h2>
-                <p>Temp:</p>
-                <p>Wind:</p>
-                <p>Humidity:</p>
-                <p>UV Index:</p>
+                <h2 class="currCity"><img src=""></h2>
+                <div class="currIcon">
+                </div>
+        
+                <div class="currWeather"></div>
             </div>
-            <div class="forecast">5-Day Forecast:</div>
+            <div class="forecast">
+                <h2>5-Day Forecast:</h2>
+            </div>
         </div>
     </div>
 
