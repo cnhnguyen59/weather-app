@@ -10,12 +10,34 @@
     <title>Weather</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <h1 style="color:white">Weather Dashboard</h1>
-            <input class="float-right" type="text" placeholder="'Ex: Chicago'">
-            <button class='btn-primary float-right' onclick="getInfo()">Enter</button>
-    </nav>
-    
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Weather Dashboard</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <form class="d-flex">
+            <input class="form-control me-sm-2" type="text" placeholder="Ex: Chicago">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit" onclick="getInfo()">Search</button>
+        </form>
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Recent Searches</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Separated link</a>
+          </div>
+        </li>
+      </ul>
+      
+    </div>
+  </div>
+</nav>
 <!--     <div class="container d-flex ">
         <div class="col-lg-4" style="border: 2px solid blue;">
             <h2>Enter a City:</h2>
@@ -33,9 +55,9 @@
         
                 <div class="currWeather"></div>
             </div>
-            <!-- <div class="forecast">
+            <div class="forecast">
                 <h2>5-Day Forecast:</h2>
-            </div> -->
+            </div>
         </div>
     </div>
 
