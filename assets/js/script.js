@@ -1,3 +1,4 @@
+
 var inputEl = $('input')
 var currCityEl = $('.currCity')
 var city = inputEl.val()
@@ -8,10 +9,13 @@ const part ='minutely,hourly'
 
 
 function getInfo(){
+
    /*  var city = inputEl.val()
     console.log(city)
 
     currCityEl.text(`${city} ${moment().format('L')}`) */
+
+    console.log('running getInfo')
 
     getLatLon()
 
@@ -19,18 +23,6 @@ function getInfo(){
     lon = localStorage.getItem('lon')
 
     var oneCallUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=${part}&units=imperial&appid=${apiKey}`
-/*     var forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${inputEl.val()}&exclude=hourly&appid=${apiKey}`
-
-    console.log(oneCallUrl)
-  
-    fetch(forecastUrl)
-    .then(function(response){
-        return response.json();
-    })
-    .then(function(data){
-        console.log(data)
-    })
-    .catch(console.err)      */
 
     fetch(oneCallUrl)
     .then(function(response){
@@ -38,10 +30,10 @@ function getInfo(){
     })
     .then(function(data){
         console.log(data)
-        /* console.log(data.current.temp)
+        console.log(data.current.temp)
         console.log(data.current.wind_speed)
         console.log(data.current.humidity)
-        console.log(data.current.uvi) */
+        console.log(data.current.uvi) 
 
         var temp = data.current.temp
         var ws = data.current.wind_speed
@@ -57,11 +49,13 @@ function getInfo(){
             color = 'red'
         }
 
-        var output = `Temp: ${temp} | Wind: ${ws} | Humidity: ${humid} | UV Index: <span class="py-1 px-3" style="color: white; border-radius: 1px; background-color:${color}">${uvi}</span>`
+        var output = `Temp: ${temp}°F | Wind: ${ws} MPH | Humidity: ${humid}% | UV Index: <span class="py-1 px-3" style="color: white; border-radius: 1px; background-color:${color}">${uvi}</span>`
 
         $('.currWeather').html(output)
 
         var forecast = data.daily.slice(1,6)
+
+        var forecastOutput =''
 
         forecast.forEach(data => {
 
@@ -70,21 +64,18 @@ function getInfo(){
             var month = new Date(unix_timestamp * 1000).getMonth()
             var year = new Date(unix_timestamp * 1000).getFullYear()
 
-            var output = `<div>${month}/${day}/${year}\n
-            <img src="./assets/icons/${data.weather[0].icon}.png"/>
-            Temp:${data.temp.day}\nWind: ${data.wind_speed} MPH\n
+            forecastOutput += `<div class="m-2 p-1" style="border: 1px solid black; border-radius: 10px;"> <p style="font-weight:bold;">${month}/${day}/${year}</p>
+            <img src="./assets/icons/${data.weather[0].icon}.png"/>\n<br>
+            Temp:${data.temp.day}°F<br>
+            Wind: ${data.wind_speed} MPH<br>
             Humidity: ${data.humidity}%</div>`
-
-            console.log(output)
-
-            $('.forecast').append(output)
 
         })
 
-        console.log(forecast)
-
+        $('.forecast').html(forecastOutput)
+        $('.forecast-box').css('visibility','visible')
     })
-  
+    .catch(console.err) 
 }
 
 function getLatLon(){
@@ -95,8 +86,8 @@ function getLatLon(){
         return response.json();
     })
     .then(function(data){
-        /* console.log(data)
-        console.log(data.coord) */
+        console.log(data)
+        /*console.log(data.coord) */
         localStorage.setItem('lat', JSON.stringify(data.coord.lat))
         localStorage.setItem('lon', JSON.stringify(data.coord.lon))
        /*  console.log(data.coord.lat)
@@ -105,7 +96,9 @@ function getLatLon(){
         localStorage.getItem('lon') */
 
         var city = data.name
+        console.log(city)
         var icon = data.weather[0].icon
+        console.log(icon)
 
         $('.currIcon').html(`<img src="./assets/icons/${icon}.png"/>`)
         
@@ -115,7 +108,3 @@ function getLatLon(){
     })
     .catch(console.err)
 }
-
-
-
-function createHistBtn(){}
