@@ -7,13 +7,13 @@ const apiKey =`7b9f6bec4c139049a453497279489bbe`
 var lon = localStorage.getItem('lon') */
 const part ='minutely,hourly'
 
-/* if(localStorage.getItem('recentSearches')){
+if(localStorage.getItem('recentSearches')){
     var recentSearches= JSON.parse(localStorage.getItem('recentSearches'))
     recentSearches = recentSearches.reverse()
     recentSearches.forEach(city =>{
         $(".search-history").append(`<button type="button" class="btn btn-primary col-10 m-1">${city}</button>`)
     })
-} */
+}
 
 
 function getInfo(){
@@ -80,6 +80,8 @@ function getInfo(){
         $('.forecast-box').css('visibility','visible')
     })
     .catch(console.err) 
+
+    createBtn() 
 }
 
 async function getLatLon(){
@@ -137,13 +139,12 @@ async function getLatLon(){
 
         currCityEl.text(`Currently in ${city}`  ${moment().format('L')} )
 
-        createBtn() 
 
     }) */
     
 }
 
-/* function createBtn(){
+function createBtn(){
 
     if(localStorage.getItem('recentSearches') == null){
         var searchArr = [inputEl.val()]
@@ -153,17 +154,21 @@ async function getLatLon(){
         var recentSearches= JSON.parse(localStorage.getItem('recentSearches'))
         if(recentSearches.includes(inputEl.val())){
             return;
-        } else{
-            if(recentSearches.length == 8) {recentSearches.shift(inputEl.val())}
+        } else if (recentSearches.length == 6) {
+            {recentSearches.shift(inputEl.val())}
             
             var city = inputEl.val()
             recentSearches.push(city)
-            $(".search-history").prepend(`<button type="button" class="btn btn-primary col-10 m-1">${input}</button>`)
+            $(".search-history").prepend(`<button type="button" class="btn btn-primary col-10 m-1">${city}</button>`)
+            localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
+        } else {
+            var city = inputEl.val()
+            recentSearches.push(city)
+            $(".search-history").prepend(`<button type="button" class="btn btn-primary col-10 m-1">${city}</button>`)
             localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
         }
-        
     }
 
 
 
-} */
+}
