@@ -11,19 +11,19 @@
 </head>
 <body>
 
-  <nav class="navbar navbar-dark bg-primary ">
-        <h1 class="text-center"style="color:white">Weather Dashboard</h1>
+  <nav class="navbar navbar-dark bg-primary justify-content-center">
+        <h1 style="color:white">Weather Dashboard</h1>
     </nav>
 
         <div class="container d-flex m-2">
-          <aside class="search col-3" style="border: 1px solid #2fa4e7; border-radius: 10px;">
+          <aside class="search col-3 justify-content-center" style="border: 1px solid #2fa4e7; border-radius: 10px;">
             <h2 class="m-2">Search for a city:</h2>
             <div class="mx-2">
               <input style="border-radius: 10px;" type="text" placeholder="'Ex: Chicago'">
-              <button class='btn-primary my-1' style="border-radius: 10px;"onclick="getLatLon()">Enter</button>
+              <button class='btn-primary my-1' style="border-radius: 10px;"onclick="getInfo()">Enter</button>
             </div>
             <p class="m-2">Recent Searches</p>
-            <div class="search-history"></div>
+            <div class="search-history justify-content-center"></div>
           </aside>
   
           <div class="weather">

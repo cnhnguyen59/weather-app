@@ -1,22 +1,25 @@
 
 var inputEl = $('input')
 var currCityEl = $('.currCity')
-var input = inputEl.val()
 const apiKey =`7b9f6bec4c139049a453497279489bbe`
-/* var lat = localStorage.getItem('lat')
-var lon = localStorage.getItem('lon') */
 const part ='minutely,hourly'
 
 if(localStorage.getItem('recentSearches')){
     var recentSearches= JSON.parse(localStorage.getItem('recentSearches'))
     recentSearches = recentSearches.reverse()
     recentSearches.forEach(city =>{
-        $(".search-history").append(`<button type="button" class="btn btn-primary col-10 m-1">${city}</button>`)
+        $(".search-history").append(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city=${city}>${city}</button>`)
     })
 }
 
-
 function getInfo(){
+    let input = inputEl.val()
+    console.log(input)
+
+    getLatLon(input)
+}
+
+function getForecast(){
 
     console.log('running getInfo')
     
@@ -33,12 +36,7 @@ function getInfo(){
         return response.json();
     })
     .then(function(data){
-        /* console.log(data)
-        console.log(data.current.temp)
-        console.log(data.current.wind_speed)
-        console.log(data.current.humidity)
-        console.log(data.current.uvi) 
- */
+
         var temp = data.current.temp
         var ws = data.current.wind_speed
         var humid = data.current.humidity
@@ -80,30 +78,28 @@ function getInfo(){
         $('.forecast-box').css('visibility','visible')
     })
     .catch(console.err) 
-
-    createBtn() 
 }
 
-async function getLatLon(){
+
+async function getLatLon(city){
 
     console.log('running latlon')
-    console.log(inputEl.val())
-    var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${inputEl.val()}&units=imperial&appid=${apiKey}`
+    console.log(city)
+    var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`
     console.log(weatherUrl)
 
     const response = await fetch(weatherUrl);
     const data = await response.json()
 
     console.log(data)
-    /*console.log(data.coord) */
+  
     localStorage.setItem('lat', JSON.stringify(data.coord.lat))
     localStorage.setItem('lon', JSON.stringify(data.coord.lon))
-    /*  console.log(data.coord.lat)
-    console.log(data.coord.lon) */
+  
     localStorage.getItem('lat')
     localStorage.getItem('lon')
 
-    var city = data.name
+    /* var city = data.name */
     console.log(city)
     var icon = data.weather[0].icon
     console.log(icon)
@@ -111,9 +107,9 @@ async function getLatLon(){
     $('.currIcon').html(`<img src="./assets/icons/${icon}.png"/>`)
     currCityEl.text(`Currently in ${city}` /* ${moment().format('L')} */)
 
-    getInfo()
+    getForecast()
+    createBtn(city) 
     
-
  
     /* fetch(weatherUrl)
     .then(function(response){
@@ -144,31 +140,47 @@ async function getLatLon(){
     
 }
 
-function createBtn(){
+function createBtn(city){
 
     if(localStorage.getItem('recentSearches') == null){
-        var searchArr = [inputEl.val()]
+        var searchArr = [city]
         localStorage.setItem('recentSearches', JSON.stringify(searchArr))
         var recentSearches = JSON.parse(localStorage.getItem('recentSearches'))
+        $(".search-history").append(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city=${city}>${city}</button>`)
     } else {
         var recentSearches= JSON.parse(localStorage.getItem('recentSearches'))
-        if(recentSearches.includes(inputEl.val())){
+        if(recentSearches.includes(city)){
             return;
         } else if (recentSearches.length == 6) {
-            {recentSearches.shift(inputEl.val())}
+            {recentSearches.shift()}
             
-            var city = inputEl.val()
+            /* var city = inputEl.val() */
             recentSearches.push(city)
-            $(".search-history").prepend(`<button type="button" class="btn btn-primary col-10 m-1">${city}</button>`)
+            $(".search-history").append(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city=${city})>${city}</button>`)
             localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
         } else {
             var city = inputEl.val()
             recentSearches.push(city)
-            $(".search-history").prepend(`<button type="button" class="btn btn-primary col-10 m-1">${city}</button>`)
+            $(".search-history").append(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city=${city} >${city}</button>`)
             localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
         }
     }
 
+}
+
+/* function selectCityBtn(e){
+    console.log(e)
+    console.log(e.target.dataset.city)
+    cityBtnForecast(e.target.dataset.city)
+} */
+
+$(".cityBtn").click(e=>{
+    console.log((e.target.dataset.city));
+    cityBtnForecast(e.target.dataset.city)
+}) 
 
 
+function cityBtnForecast(city) {
+    let input = city
+    getLatLon(input)
 }
