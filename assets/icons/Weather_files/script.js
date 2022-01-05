@@ -1,44 +1,41 @@
 
 var inputEl = $('input')
 var currCityEl = $('.currCity')
-var input = inputEl.val()
+var city = inputEl.val()
 const apiKey =`7b9f6bec4c139049a453497279489bbe`
-/* var lat = localStorage.getItem('lat')
-var lon = localStorage.getItem('lon') */
+var lat = localStorage.getItem('lat')
+var lon = localStorage.getItem('lon')
 const part ='minutely,hourly'
-
-/* if(localStorage.getItem('recentSearches')){
-    var recentSearches= JSON.parse(localStorage.getItem('recentSearches'))
-    recentSearches = recentSearches.reverse()
-    recentSearches.forEach(city =>{
-        $(".search-history").append(`<button type="button" class="btn btn-primary col-10 m-1">${city}</button>`)
-    })
-} */
+var recentSearches = localStorage.getItem("recentSearches")
 
 
 function getInfo(){
 
-    console.log('running getInfo')
-    
-    var lat = localStorage.getItem('lat')
-    var lon = localStorage.getItem('lon')
+   /*  var city = inputEl.val()
+    console.log(city)
 
-    console.log(lat)
-    console.log(lon)
+    currCityEl.text(`${city} ${moment().format('L')}`) */
+
+    console.log('running getInfo')
+
+    getLatLon()
+
+    lat = localStorage.getItem('lat')
+    lon = localStorage.getItem('lon')
 
     var oneCallUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=${part}&units=imperial&appid=${apiKey}`
-    console.log(oneCallUrl)
+
     fetch(oneCallUrl)
     .then(function(response){
         return response.json();
     })
     .then(function(data){
-        /* console.log(data)
+        console.log(data)
         console.log(data.current.temp)
         console.log(data.current.wind_speed)
         console.log(data.current.humidity)
         console.log(data.current.uvi) 
- */
+
         var temp = data.current.temp
         var ws = data.current.wind_speed
         var humid = data.current.humidity
@@ -82,50 +79,22 @@ function getInfo(){
     .catch(console.err) 
 }
 
-async function getLatLon(){
-
-    console.log('running latlon')
-    console.log(inputEl.val())
+function getLatLon(){
     var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${inputEl.val()}&units=imperial&appid=${apiKey}`
-    console.log(weatherUrl)
-
-    const response = await fetch(weatherUrl);
-    const data = await response.json()
-
-    console.log(data)
-    /*console.log(data.coord) */
-    localStorage.setItem('lat', JSON.stringify(data.coord.lat))
-    localStorage.setItem('lon', JSON.stringify(data.coord.lon))
-    /*  console.log(data.coord.lat)
-    console.log(data.coord.lon) */
-    localStorage.getItem('lat')
-    localStorage.getItem('lon')
-
-    var city = data.name
-    console.log(city)
-    var icon = data.weather[0].icon
-    console.log(icon)
-
-    $('.currIcon').html(`<img src="./assets/icons/${icon}.png"/>`)
-    currCityEl.text(`Currently in ${city}` /* ${moment().format('L')} */)
-
-    getInfo()
-    
-
  
-    /* fetch(weatherUrl)
+    fetch(weatherUrl)
     .then(function(response){
         return response.json();
     })
-    .then(data => {
+    .then(function(data){
         console.log(data)
-        console.log(data.coord) 
+        /*console.log(data.coord) */
         localStorage.setItem('lat', JSON.stringify(data.coord.lat))
         localStorage.setItem('lon', JSON.stringify(data.coord.lon))
-        console.log(data.coord.lat)
-        console.log(data.coord.lon) 
-        localStorage.getItem('lat')
-        localStorage.getItem('lon')
+       /*  console.log(data.coord.lat)
+        console.log(data.coord.lon) */
+        /* localStorage.getItem('lat')
+        localStorage.getItem('lon') */
 
         var city = data.name
         console.log(city)
@@ -135,35 +104,14 @@ async function getLatLon(){
         $('.currIcon').html(`<img src="./assets/icons/${icon}.png"/>`)
         
 
-        currCityEl.text(`Currently in ${city}`  ${moment().format('L')} )
+        currCityEl.text(`Currently in ${city}` /* ${moment().format('L')} */)
 
-        createBtn() 
+        createBtn()
 
-    }) */
-    
+    })
+    .catch(console.err)
 }
 
-/* function createBtn(){
+function createBtn(){
 
-    if(localStorage.getItem('recentSearches') == null){
-        var searchArr = [inputEl.val()]
-        localStorage.setItem('recentSearches', JSON.stringify(searchArr))
-        var recentSearches = JSON.parse(localStorage.getItem('recentSearches'))
-    } else {
-        var recentSearches= JSON.parse(localStorage.getItem('recentSearches'))
-        if(recentSearches.includes(inputEl.val())){
-            return;
-        } else{
-            if(recentSearches.length == 8) {recentSearches.shift(inputEl.val())}
-            
-            var city = inputEl.val()
-            recentSearches.push(city)
-            $(".search-history").prepend(`<button type="button" class="btn btn-primary col-10 m-1">${input}</button>`)
-            localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
-        }
-        
-    }
-
-
-
-} */
+}
