@@ -19,6 +19,36 @@ function getInfo(){
     getLatLon(input)
 }
 
+async function getLatLon(city){
+
+    console.log('running latlon')
+    console.log(city)
+    var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`
+    console.log(weatherUrl)
+
+    const response = await fetch(weatherUrl);
+    const data = await response.json()
+
+    console.log(data)
+  
+    localStorage.setItem('lat', JSON.stringify(data.coord.lat))
+    localStorage.setItem('lon', JSON.stringify(data.coord.lon))
+  
+    localStorage.getItem('lat')
+    localStorage.getItem('lon')
+
+    /* var city = data.name */
+    console.log(city)
+    var icon = data.weather[0].icon
+    console.log(icon)
+
+    $('.currIcon').html(`<img src="./assets/icons/${icon}.png"/>`)
+    currCityEl.text(`Currently in ${city}` /* ${moment().format('L')} */)
+
+    getForecast()
+    createBtn(city) 
+}
+
 function getForecast(){
 
     console.log('running getInfo')
@@ -81,65 +111,6 @@ function getForecast(){
 }
 
 
-async function getLatLon(city){
-
-    console.log('running latlon')
-    console.log(city)
-    var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`
-    console.log(weatherUrl)
-
-    const response = await fetch(weatherUrl);
-    const data = await response.json()
-
-    console.log(data)
-  
-    localStorage.setItem('lat', JSON.stringify(data.coord.lat))
-    localStorage.setItem('lon', JSON.stringify(data.coord.lon))
-  
-    localStorage.getItem('lat')
-    localStorage.getItem('lon')
-
-    /* var city = data.name */
-    console.log(city)
-    var icon = data.weather[0].icon
-    console.log(icon)
-
-    $('.currIcon').html(`<img src="./assets/icons/${icon}.png"/>`)
-    currCityEl.text(`Currently in ${city}` /* ${moment().format('L')} */)
-
-    getForecast()
-    createBtn(city) 
-    
- 
-    /* fetch(weatherUrl)
-    .then(function(response){
-        return response.json();
-    })
-    .then(data => {
-        console.log(data)
-        console.log(data.coord) 
-        localStorage.setItem('lat', JSON.stringify(data.coord.lat))
-        localStorage.setItem('lon', JSON.stringify(data.coord.lon))
-        console.log(data.coord.lat)
-        console.log(data.coord.lon) 
-        localStorage.getItem('lat')
-        localStorage.getItem('lon')
-
-        var city = data.name
-        console.log(city)
-        var icon = data.weather[0].icon
-        console.log(icon)
-
-        $('.currIcon').html(`<img src="./assets/icons/${icon}.png"/>`)
-        
-
-        currCityEl.text(`Currently in ${city}`  ${moment().format('L')} )
-
-
-    }) */
-    
-}
-
 function createBtn(city){
 
     if(localStorage.getItem('recentSearches') == null){
@@ -154,7 +125,6 @@ function createBtn(city){
         } else if (recentSearches.length == 6) {
             {recentSearches.shift()}
             
-            /* var city = inputEl.val() */
             recentSearches.push(city)
             $(".search-history").append(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city=${city})>${city}</button>`)
             localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
@@ -168,13 +138,7 @@ function createBtn(city){
 
 }
 
-/* function selectCityBtn(e){
-    console.log(e)
-    console.log(e.target.dataset.city)
-    cityBtnForecast(e.target.dataset.city)
-} */
-
-$(".cityBtn").click(e=>{
+$(".search-history").on("click", e=>{
     console.log((e.target.dataset.city));
     cityBtnForecast(e.target.dataset.city)
 }) 
