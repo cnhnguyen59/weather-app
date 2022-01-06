@@ -21,15 +21,10 @@ function getInfo(){
 
 async function getLatLon(city){
 
-    console.log('running latlon')
-    console.log(city)
     var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`
-    console.log(weatherUrl)
 
     const response = await fetch(weatherUrl);
     const data = await response.json()
-
-    console.log(data)
   
     localStorage.setItem('lat', JSON.stringify(data.coord.lat))
     localStorage.setItem('lon', JSON.stringify(data.coord.lon))
@@ -37,30 +32,23 @@ async function getLatLon(city){
     localStorage.getItem('lat')
     localStorage.getItem('lon')
 
-    /* var city = data.name */
-    console.log(city)
     var icon = data.weather[0].icon
-    console.log(icon)
 
+    var today = new Date().toLocaleDateString('en-US')
+    
     $('.currIcon').html(`<img src="./assets/icons/${icon}.png"/>`)
-    currCityEl.text(`Currently in ${city}` /* ${moment().format('L')} */)
+    currCityEl.text(`Currently in ${city} (${today})` /* ${moment().format('L')} */)
 
     getForecast()
     createBtn(city) 
 }
 
 function getForecast(){
-
-    console.log('running getInfo')
     
     var lat = localStorage.getItem('lat')
     var lon = localStorage.getItem('lon')
-
-    console.log(lat)
-    console.log(lon)
-
     var oneCallUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=${part}&units=imperial&appid=${apiKey}`
-    console.log(oneCallUrl)
+
     fetch(oneCallUrl)
     .then(function(response){
         return response.json();
@@ -73,27 +61,26 @@ function getForecast(){
         var uvi = data.current.uvi
         var color =''
 
-        if (uvi < .5){
+        if (uvi < 3){
             color = 'green'
-        } else if(uvi < .8 && uvi >.5){
+        } else if(uvi < 6 && uvi > 2){
             color = 'yellow'
         } else {
             color = 'red'
         }
 
         var output = `Temp: ${temp}°F | Wind: ${ws} MPH | Humidity: ${humid}% | UV Index: <span class="py-1 px-3" style="color: white; border-radius: 1px; background-color:${color}">${uvi}</span>`
-
+        
         $('.currWeather').html(output)
 
         var forecast = data.daily.slice(1,6)
-
         var forecastOutput =''
 
         forecast.forEach(data => {
 
             var unix_timestamp = data.dt
             var day = new Date(unix_timestamp * 1000).getDate()
-            var month = new Date(unix_timestamp * 1000).getMonth()
+            var month = new Date(unix_timestamp * 1000).getMonth() + 1
             var year = new Date(unix_timestamp * 1000).getFullYear()
 
             forecastOutput += `<div class="m-2 p-1" style="border: 1px solid black; border-radius: 10px;"> <p style="font-weight:bold;">${month}/${day}/${year}</p>
@@ -122,16 +109,21 @@ function createBtn(city){
         var recentSearches= JSON.parse(localStorage.getItem('recentSearches'))
         if(recentSearches.includes(city)){
             return;
-        } else if (recentSearches.length == 6) {
-            {recentSearches.shift()}
+        } else if (recentSearches.length == 7) {
+            recentSearches.shift()
+
+            $('.search-history').empty()
             
             recentSearches.push(city)
-            $(".search-history").append(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city=${city})>${city}</button>`)
             localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
+            recentSearches = recentSearches.reverse()
+            recentSearches.forEach(city =>{
+                $(".search-history").append(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city=${city}>${city}</button>`)
+            })
         } else {
             var city = inputEl.val()
             recentSearches.push(city)
-            $(".search-history").append(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city=${city} >${city}</button>`)
+            $(".search-history").prepend(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city=${city} >${city}</button>`)
             localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
         }
     }
