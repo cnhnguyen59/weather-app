@@ -8,14 +8,12 @@ if(localStorage.getItem('recentSearches')){
     var recentSearches= JSON.parse(localStorage.getItem('recentSearches'))
     recentSearches = recentSearches.reverse()
     recentSearches.forEach(city =>{
-        $(".search-history").append(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city=${city}>${city}</button>`)
+        $(".search-history").append(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city="${city}">${city}</button>`)
     })
 }
 
 function getInfo(){
     let input = inputEl.val()
-    console.log(input)
-
     getLatLon(input)
 }
 
@@ -37,7 +35,7 @@ async function getLatLon(city){
     var today = new Date().toLocaleDateString('en-US')
     
     $('.currIcon').html(`<img src="./assets/icons/${icon}.png"/>`)
-    currCityEl.text(`Currently in ${city} (${today})` /* ${moment().format('L')} */)
+    currCityEl.text(`Currently in ${city} (${today})`)
 
     getForecast()
     createBtn(city) 
@@ -100,11 +98,13 @@ function getForecast(){
 
 function createBtn(city){
 
+    if (city.includes('+')){ input.replace('+', ' ') }
+
     if(localStorage.getItem('recentSearches') == null){
         var searchArr = [city]
         localStorage.setItem('recentSearches', JSON.stringify(searchArr))
         var recentSearches = JSON.parse(localStorage.getItem('recentSearches'))
-        $(".search-history").append(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city=${city}>${city}</button>`)
+        $(".search-history").append(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city="${city}">${city}</button>`)
     } else {
         var recentSearches= JSON.parse(localStorage.getItem('recentSearches'))
         if(recentSearches.includes(city)){
@@ -118,12 +118,12 @@ function createBtn(city){
             localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
             recentSearches = recentSearches.reverse()
             recentSearches.forEach(city =>{
-                $(".search-history").append(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city=${city}>${city}</button>`)
+                $(".search-history").append(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city="${city}">${city}</button>`)
             })
         } else {
             var city = inputEl.val()
             recentSearches.push(city)
-            $(".search-history").prepend(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city=${city} >${city}</button>`)
+            $(".search-history").prepend(`<button type="button" class="cityBtn btn btn-primary col-10 m-1" data-city="${city}">${city}</button>`)
             localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
         }
     }
@@ -131,7 +131,6 @@ function createBtn(city){
 }
 
 $(".search-history").on("click", e=>{
-    console.log((e.target.dataset.city));
     cityBtnForecast(e.target.dataset.city)
 }) 
 
